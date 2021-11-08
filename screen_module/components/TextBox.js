@@ -47,6 +47,11 @@ class TextBox extends ScreenObject {
         this.height = this.screen.draw.getStrHeight(this.msg) + parseInt(this.font, 10)*2;
     }
 
+    setMsg(msg) {
+        this.msg = msg;
+        this.getMsgDimensions();
+    }
+
 }
 
 export {TextBox}

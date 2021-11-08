@@ -1,16 +1,17 @@
 import { Calc } from "./Calc.js";
 import { ScreenGrid } from "./ScreenGrid.js";
+import { TextBox } from "./components/TextBox.js"
 
 
 // *** NOT SUITABLE FOR SMALL OBJECTS!!! USE COLLISION_RECT FOR SMALL OBJECTS!!! *** 
 
 class CollisionMask extends ScreenGrid {
     
-    constructor(host) {
-        super(host.screen, host.x, host.y, 15, 15, 4);
+    constructor(host, x=host.x, y=host.y, width=15, height=15, cellSize=4) {
+        super(host.screen, x, y, width, height, cellSize);
         this.host = host;
 
-        this.size = 7;
+        this.size = Math.floor(width/2 - 1) ;
         this.sides = 4;
 
         this.width = this.cellSize * this.grid.cols;
@@ -19,6 +20,9 @@ class CollisionMask extends ScreenGrid {
         this.showMask = false;
 
         this.screen.masks.push(this);
+        
+        this.stats = "";
+
 
     }
 
@@ -33,6 +37,7 @@ class CollisionMask extends ScreenGrid {
         this.y = Math.floor( (this.host.y - this.cellSize * (this.grid.rows/2 - 1)) / this.cellSize ) * this.cellSize;
 
         this.checkCollision();
+
         
     }
 
@@ -61,7 +66,14 @@ class CollisionMask extends ScreenGrid {
             if (mask !== this) {
                 if (Calc.collisionRect(this.x, this.y, this.width, this.height, mask.x, mask.y, mask.width, mask.height)) {
                     this.gridColor = 'orange';
-                    this.checkPrecCollision(mask);
+
+                    if (this.checkPrecCollision(mask)) {
+                        this.highlightColor = 'rgba(0, 0, 200, 0.5)';
+                        return true;
+                    }
+
+                    this.highlightColor = 'rgba(0, 200, 0, 0.5)';
+                    return false;
                 }   
                 else {
                     this.gridColor = 'grey';
@@ -72,46 +84,52 @@ class CollisionMask extends ScreenGrid {
 
 
     checkPrecCollision(mask) {
-        const xOffset = (this.x - mask.x) / this.cellSize;
-        const yOffset = (this.y - mask.y) / this.cellSize;
+        
 
-        let sect1;
-        let sect2;
+        const dist = Math.round(Calc.getDist(this.x, this.y, mask.x, mask.y) / this.cellSize);
+        const dir = Calc.getDir(this.x, this.y, mask.x, mask.y);
 
-        if (xOffset > 0) {
-            if (yOffset > 0) {
-                sect1 = this.grid.getRect(0, 0, this.grid.cols-xOffset, this.grid.rows-yOffset);
-                sect2 = mask.grid.getRect(yOffset, xOffset, mask.grid.cols-xOffset, mask.grid.rows-yOffset);
-            }
-            else {
-                sect1 = this.grid.getRect(-yOffset, 0, this.grid.cols-xOffset, this.grid.rows+yOffset);
-                sect2 = mask.grid.getRect(0, xOffset, mask.grid.cols-xOffset, mask.grid.rows+yOffset);
-            }
-        }
-        else {
-            if (yOffset > 0) {
-                sect1 = this.grid.getRect(0, -xOffset, this.grid.cols+xOffset, this.grid.rows-yOffset);
-                sect2 = mask.grid.getRect(yOffset, 0, mask.grid.cols+xOffset, mask.grid.cols-yOffset);
-            }
-            else {
-                sect1 = this.grid.getRect(-yOffset, -xOffset, this.grid.cols+xOffset, this.grid.rows+yOffset);
-                sect2 = mask.grid.getRect(0, 0, mask.grid.cols+xOffset, mask.grid.rows+yOffset);
-            }
+        let sectARow = Math.round(dist * Math.sin(dir));
+        let sectACol = Math.round(dist * Math.cos(dir));
+
+        let sectBRow = 0;
+        let sectBCol = 0;
+
+        if (sectARow < 0) {
+            sectARow = 0;
+            sectBRow = Math.round(dist * -Math.sin(dir));
         }
 
+        if (sectACol < 0) {
+            sectACol = 0;
+            sectBCol = Math.round(dist * -Math.cos(dir));
+        }
 
-        for (let r=0; r<sect1.rows; r++) {
-            for (let c=0; c<sect1.cols; c++) {
-                if (sect1[r][c] && sect1[r][c] === sect2[r][c]) {
-                    this.highlightColor = 'rgba(0, 0, 200, 0.5)'
-                    return;
+        const rows = Math.min(this.grid.rows-sectARow, mask.grid.rows-sectBRow);
+        const cols = Math.min(this.grid.cols-sectACol, mask.grid.cols-sectBCol);
+
+        const sect1 = this.grid.getRect(sectARow, sectACol, cols, rows);
+        const sect2 = mask.grid.getRect(sectBRow, sectBCol, cols, rows);
+
+        
+
+        for (let r=0; r<rows; r++) {
+            for (let c=0; c<cols; c++) {
+                
+                if ( (sect1[r][c] === 1) && (sect1[r][c] === sect2[r][c])) {
+                    return true;
                 }
+
             }
         }
+        
+    
+        
 
-        this.highlightColor = 'rgba(0, 200, 0, 0.5)';
+        return false;
 
     }
+    
 
     
 }
