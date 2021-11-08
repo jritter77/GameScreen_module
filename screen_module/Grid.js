@@ -160,29 +160,9 @@ class Grid extends Array {
 
         // fill in area within lines
         for (let r=Math.min(...yVals)+1; r<Math.max(...yVals); r++) {
-            let fill = false;
-            let prevFilled = false;
 
-            for (let c=0; c<this.cols; c++) {
-
-                if (c >= Math.max(...xVals)) {
-                    break;
-                }
-
-                if (fill && !this[r][c]) {
+            for (let c=this[r].indexOf(val); c<this[r].lastIndexOf(val); c++) {
                     this[r][c] = val;
-                    prevFilled = true;
-                }
-                
-
-
-                if (!fill && !prevFilled && this[r][c]) {
-                    fill = true;
-                }
-                else if (fill && prevFilled && this[r][c+1]) {
-                   break;
-                }
-                
             }
 
         }
