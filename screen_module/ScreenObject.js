@@ -36,6 +36,17 @@ class ScreenObject {
         this.screen.objects.splice(this.screen.objects.indexOf(this), 1);
     }
 
+    getAncestry() {
+        this.types = [];
+        parent = this;
+        while (this.types.indexOf('ScreenObject') < 0) {
+            parent = Object.getPrototypeOf(parent);
+            this.types.push(parent.constructor.name);
+        }
+        
+        return this.types;
+    }
+
     
 }
 

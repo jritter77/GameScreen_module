@@ -19,9 +19,7 @@ class MotionObject extends ScreenObject {
         this.target = null;
     }
 
-    drawMiddleground() {
-        this.screen.draw.poly(this.scaledX, this.scaledY, 32*this.screen.scale, 4, this.direction);
-    }
+    
 
     update() {
         super.update();

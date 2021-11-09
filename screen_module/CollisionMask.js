@@ -7,12 +7,17 @@ import { TextBox } from "./components/TextBox.js"
 
 class CollisionMask extends ScreenGrid {
     
-    constructor(host, x=host.x, y=host.y, width=15, height=15, cellSize=4) {
-        super(host.screen, x, y, width, height, cellSize);
-        this.host = host;
+    constructor(host, x=host.x, y=host.y, size, sides=4, cellSize=4) {
+        const width = Math.ceil(size*2.1 / cellSize);
+        const height = Math.ceil(size*2.1 / cellSize);
 
-        this.size = Math.floor(width/2 - 1) ;
-        this.sides = 4;
+        super(host.screen, x, y, width, height, cellSize);
+
+        this.host = host;
+        this.collisions = [];
+
+        this.size = Math.floor(size / cellSize);
+        this.sides = sides;
 
         this.width = this.cellSize * this.grid.cols;
         this.height = this.cellSize * this.grid.rows;
@@ -62,6 +67,9 @@ class CollisionMask extends ScreenGrid {
 
 
     checkCollision() {
+        this.collisions = [];
+        this.highlightColor = 'rgba(0, 200, 0, 0.5)';
+
         for (let mask of this.screen.masks) {
             if (mask !== this) {
                 if (Calc.collisionRect(this.x, this.y, this.width, this.height, mask.x, mask.y, mask.width, mask.height)) {
@@ -69,11 +77,11 @@ class CollisionMask extends ScreenGrid {
 
                     if (this.checkPrecCollision(mask)) {
                         this.highlightColor = 'rgba(0, 0, 200, 0.5)';
-                        return true;
+                        this.collisions.push(mask.host);
+                        continue;
                     }
 
-                    this.highlightColor = 'rgba(0, 200, 0, 0.5)';
-                    return false;
+                    
                 }   
                 else {
                     this.gridColor = 'grey';
