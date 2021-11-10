@@ -22,7 +22,15 @@ class MotionObject extends ScreenObject {
     
 
     update() {
+
         super.update();
+        this.move();
+
+    }
+
+
+
+    move() {
 
         // Check if object is currently following a target
         if (this.follow) {
@@ -40,14 +48,20 @@ class MotionObject extends ScreenObject {
             
         }
 
-        // This is the actual move function
         this.x = this.x + this.speed * Math.cos(this.direction);
         this.y = this.y + this.speed * Math.sin(this.direction);
+
     }
+
 
     moveTo(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    snapTo(x, y, cellsize) {
+        this.x = Math.round(x/cellsize) * cellsize;
+        this.y = Math.round(y/cellsize) * cellsize;
     }
 
     setMotion(speed, dir) {

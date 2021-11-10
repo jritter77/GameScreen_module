@@ -68,8 +68,8 @@ class Grid extends Array {
             const end = Math.max(p1.y, p2.y);
             const f = Calc.getLineX;
 
-            for (let row=start; row<end+1; row++) {
-                const col = Math.round( f(row, slope, p1.x, p1.y) );
+            for (let row=start; row<end; row++) {
+                const col = Math.floor( f(row, slope, p1.x, p1.y) );
                 this[row][col] = val;
                 cells.push({row: row, col: col});
             }
@@ -83,8 +83,8 @@ class Grid extends Array {
             const end = Math.max(p1.x, p2.x);
             const f = Calc.getLineY;
 
-            for (let col=start; col<end+1; col++) {
-                const row = Math.round( f(col, slope, p1.x, p1.y) );
+            for (let col=start; col<end; col++) {
+                const row = Math.floor( f(col, slope, p1.x, p1.y) );
                 this[row][col] = val;
                 cells.push({row: row, col: col});
             }
@@ -143,8 +143,8 @@ class Grid extends Array {
         // set lines of polygon
         for (let i=1; i<sides+1; i++) {
 
-            const nextX = Math.round(x + size*Math.cos(angle + spread*i));
-            const nextY = Math.round(y + size*Math.sin(angle + spread*i));
+            const nextX = Math.floor(x + size*Math.cos(angle + spread*i));
+            const nextY = Math.floor(y + size*Math.sin(angle + spread*i));
 
             this.setLine({x: curX, y: curY}, {x: nextX, y: nextY}, val);
 
@@ -161,7 +161,15 @@ class Grid extends Array {
         // fill in area within lines
         for (let r=Math.min(...yVals)+1; r<Math.max(...yVals); r++) {
 
-            for (let c=this[r].indexOf(val); c<this[r].lastIndexOf(val); c++) {
+            let start = this[r].indexOf(val);
+            let end = this[r].lastIndexOf(val);
+
+
+            if (end <= start) {
+                end = this[r-1].lastIndexOf(val);
+            } 
+
+            for (let c=start; c<end; c++) {
                     this[r][c] = val;
             }
 

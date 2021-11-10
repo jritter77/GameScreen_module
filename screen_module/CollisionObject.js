@@ -13,11 +13,15 @@ class CollisionObject extends MotionObject {
         this.sides = 4;
 
         this.collisionMask = new CollisionMask(this, this.x, this.y, this.size);
-        this.collisionMask.showMask = true;
+        this.collisionMask.showMask = false;
 
         this.collisionEvents = {};
 
+        this.drawColor = 'red';
+
     }
+
+    
 
     setCollisionEvent(targetType, action) {
         this.collisionEvents[targetType] = action;
@@ -43,7 +47,7 @@ class CollisionObject extends MotionObject {
                     // if a collision event exists for object type, execute event
                     if (this.collisionEvents[type]) {
                         
-                        this.collisionEvents[type](this, other);
+                        this.collisionEvents[type](other);
 
                     }
                 }
@@ -53,7 +57,7 @@ class CollisionObject extends MotionObject {
  
 
     drawMiddleground() {
-        this.screen.draw.poly(this.scaledX, this.scaledY, this.size*this.screen.scale, this.sides, this.direction);
+        this.screen.draw.poly(this.scaledX, this.scaledY, this.size*this.screen.scale, this.sides, this.direction, this.drawColor);
     }
 }
 
