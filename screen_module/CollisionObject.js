@@ -15,12 +15,42 @@ class CollisionObject extends MotionObject {
         this.collisionMask = new CollisionMask(this, this.x, this.y, this.size);
         this.collisionMask.showMask = true;
 
+        this.collisionEvents = {};
+
     }
 
-    update() {
-        super.update();
-        if (this.collisionMask.collisions.length) console.log(this.collisionMask.collisions[0].getAncestry());
+    setCollisionEvent(targetType, action) {
+        this.collisionEvents[targetType] = action;
     }
+
+    removeCollisionEvent(targetType) {
+        delete this.collisionEvents[targetType];
+    }
+
+
+    collision() {
+        const collisions = this.collisionMask.collisions;
+
+        // Check if any collisions are present
+        if (this.collisionMask.collisions.length) {
+
+            // loop through collisions
+            for (let other of collisions) {
+
+                // loop through all types of other object
+                for (let type of other.ancestry) {
+
+                    // if a collision event exists for object type, execute event
+                    if (this.collisionEvents[type]) {
+                        
+                        this.collisionEvents[type](this, other);
+
+                    }
+                }
+            }
+        }
+    }
+ 
 
     drawMiddleground() {
         this.screen.draw.poly(this.scaledX, this.scaledY, this.size*this.screen.scale, this.sides, this.direction);

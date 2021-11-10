@@ -5,6 +5,7 @@ class ScreenObject {
         this.screen = screen;
         this.x = x;
         this.y = y;
+        this.ancestry = this.getAncestry();
 
         this.addToScreen();
     }

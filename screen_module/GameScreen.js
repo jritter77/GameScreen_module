@@ -44,6 +44,7 @@ class GameScreen {
 	    this.scaledMouseY = (this.mouse.y - this.yOffset)/this.scale;
 
         this.updateObjects();
+        this.processCollisions();
 
         this.drawBackground();
         this.drawMiddleground();
@@ -55,6 +56,14 @@ class GameScreen {
     updateObjects() {
         for (let obj of this.objects) {
             obj.update();
+        }
+    }
+
+    processCollisions() {
+        for (let obj of this.objects) {
+            if (obj.collision) {
+                obj.collision();
+            }
         }
     }
 

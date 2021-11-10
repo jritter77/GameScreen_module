@@ -21,6 +21,10 @@ function Page() {
         test.stopMotion();
     }
 
+    test.setCollisionEvent('ScreenObject', (self, other) => {
+        console.log(self, other);
+    });
+
     
 
     const test2 = new CollisionObject(screen, 128, 128, 64, 64);
