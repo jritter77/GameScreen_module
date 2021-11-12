@@ -20,12 +20,17 @@ class GameScreen {
         this.objects = [];
         this.masks = [];
 
+        this.fps = 60;
+        this.interval = 1000/this.fps;
+        this.frameCount = 0;
+
         this.animationStart();
     }
 
 
     animationStart() {
         this.paused = false;
+        this.lastFrame = Date.now();
         this.animationLoop();
     }
 
@@ -38,17 +43,29 @@ class GameScreen {
             return;
         }
 
-        this.draw.clearScreen();
+        const curFrame = Date.now();
+        const elapsed = curFrame - this.lastFrame;
 
-        this.scaledMouseX = (this.mouse.x - this.xOffset)/this.scale;
-	    this.scaledMouseY = (this.mouse.y - this.yOffset)/this.scale;
+        if (elapsed > this.interval) {
 
-        this.updateObjects();
-        this.processCollisions();
+            this.draw.clearScreen();
 
-        this.drawBackground();
-        this.drawMiddleground();
-        this.drawForeground();
+            this.scaledMouseX = (this.mouse.x - this.xOffset)/this.scale;
+            this.scaledMouseY = (this.mouse.y - this.yOffset)/this.scale;
+
+            this.updateObjects();
+            this.processCollisions();
+
+            this.drawBackground();
+            this.drawMiddleground();
+            this.drawForeground();
+
+            this.lastFrame = curFrame;
+            this.frameCount++;
+
+        }
+
+        
 
         requestAnimationFrame(() => this.animationLoop());
     }
