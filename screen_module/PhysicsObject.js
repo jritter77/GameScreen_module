@@ -9,10 +9,13 @@ class PhysicsObject extends SolidObject {
         this.drag = 1;
 
         this.acceleration = 0;
-        this.turnSpeed = 5;
+        this.turnSpeed = 10;
 
         this.hspeed = 0;
         this.vspeed = 0;
+        this.maxSpeed = 20;
+
+        this.elasticicity = 0;
 
 
         this.setCollisionEvent('PhysicsObject', (other) => this.physCollision(other));
@@ -46,18 +49,18 @@ class PhysicsObject extends SolidObject {
             this.vspeed /= 1.1;
         }
 
-        if (this.hspeed > 10) {
-            this.hspeed = 10;
+        if (this.hspeed > this.maxSpeed) {
+            this.hspeed = this.maxSpeed;
         }
-        else if (this.hspeed < -10) {
-            this.hspeed = -10;
+        else if (this.hspeed < -this.maxSpeed) {
+            this.hspeed = -this.maxSpeed;
         }
 
-        if (this.vspeed > 10) {
-            this.vspeed = 10;
+        if (this.vspeed > this.maxSpeed) {
+            this.vspeed = this.maxSpeed;
         }
-        else if (this.vspeed < -10) {
-            this.vspeed = -10;
+        else if (this.vspeed < -this.maxSpeed) {
+            this.vspeed = -this.maxSpeed;
         }
         
         
@@ -80,6 +83,11 @@ class PhysicsObject extends SolidObject {
 
         let diff = this.direction - dir;
 
+
+        if ((Math.abs(Math.PI - Math.abs(diff))) < this.turnSpeed*Math.PI/180) {
+            return;
+        }
+
         if (Math.abs(Math.PI - Math.abs(diff)) > Math.PI/180*2) {
             if (Math.sin(diff) < 0) {
                 this.direction -= this.turnSpeed*Math.PI/180;
@@ -93,13 +101,27 @@ class PhysicsObject extends SolidObject {
 
     physCollision(other) {
         
-        const force = other.weight * (Math.sqrt(other.hspeed**2+other.vspeed**2));
-        const dir = Calc.getDir(other.x, other.y, this.x, this.y);
+        const hm = (this.weight * this.hspeed) + (other.weight * other.hspeed);
+        const vm = (this.weight * this.vspeed) + (other.weight * other.vspeed);
 
-        console.log(force/this.weight);
-        this.hspeed += (force / this.weight) * Math.cos(dir);
-        this.vspeed += (force / this.weight) * Math.sin(dir);
+        const totalWeight = this.weight + other.weight;
 
+        this.hspeed = hm / totalWeight;
+        this.vspeed = vm / totalWeight;
+
+
+        if (this.elasticicity) {
+            const dir = Calc.getDir(other.x, other.y, this.x, this.y);
+
+            this.hspeed += ((Math.abs(hm)/this.weight) * Math.cos(dir)) * this.elasticicity;
+            this.vspeed += ((Math.abs(vm)/this.weight) * Math.sin(dir)) * this.elasticicity;
+
+            other.hspeed += ((Math.abs(hm)/other.weight) * -Math.cos(dir)) * other.elasticicity;
+            other.vspeed += ((Math.abs(vm)/other.weight) * -Math.sin(dir)) * other.elasticicity;
+        }
+        
+        
+        
         
     }
 }

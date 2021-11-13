@@ -15,6 +15,7 @@ class SolidObject extends CollisionObject {
     }
 
     solidCollision(other) {
+        
         const dir = Calc.getDir(other.x, other.y, this.x, this.y);
 
         this.x = this.x + Math.cos(dir);

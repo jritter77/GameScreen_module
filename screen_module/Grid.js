@@ -166,7 +166,7 @@ class Grid extends Array {
 
 
             if (end <= start) {
-                end = this[r-1].lastIndexOf(val);
+                end = this[r-1].lastIndexOf(val)+1;
             } 
 
             for (let c=start; c<end; c++) {

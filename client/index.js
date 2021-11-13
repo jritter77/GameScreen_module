@@ -13,29 +13,17 @@ function Page() {
 
 
 
-    const phaseable = new CollisionObject(screen, 128, 128, 128, 128);
-    phaseable.sides = 6;
-    phaseable.collisionMask.sides = 6;
-    phaseable.drawColor = 'blue';
+    
 
-    phaseable.setCollisionEvent('SolidObject', (other) => {
-        
-        if (other === box) {
-            phaseable.drawColor = 'green';
-        }
-        else {
-            phaseable.drawColor = 'blue';
-        }
-
-    })
+    
 
 
 
 
     const test = new PhysicsObject(screen, 256, 256, 64, 64);
-    test.sides = 4;
-    test.collisionMask.sides = 4;
-    test.weight = 50;
+    test.sides = 3;
+    test.collisionMask.sides = 3;
+    test.weight = 20;
     
 
     test.mouseDown = e => {
@@ -50,8 +38,11 @@ function Page() {
 
     
     
-    const solid = new SolidObject(screen, 312, 128, 64, 64);
+    const solid = new PhysicsObject(screen, 312, 128, 64, 64);
     solid.drawColor = 'purple';
+    solid.weight = 20;
+    solid.moveable = true;
+    solid.elasticicity = .5;
 
     
 
@@ -60,6 +51,15 @@ function Page() {
     box.moveable = true;
     box.direction = Math.PI/4;
     box.drawColor = 'white';
+    box.weight = 5;
+    box.elasticicity = 1;
+
+    const box2 = new SolidObject(screen, 128, 128, 128, 128);
+    box2.direction = Math.PI/4;
+    box2.drawColor = 'white';
+   
+
+
     screen.animationStart();
 
 
