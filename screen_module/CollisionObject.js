@@ -22,6 +22,7 @@ class CollisionObject extends MotionObject {
     }
 
     
+    
 
     setCollisionEvent(targetType, action) {
         this.collisionEvents[targetType] = action;
@@ -40,6 +41,10 @@ class CollisionObject extends MotionObject {
 
             // loop through collisions
             for (let other of collisions) {
+
+                if (other.master) {
+                    other = other.master;
+                }
 
                 // loop through all types of other object
                 for (let type of other.ancestry) {

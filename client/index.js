@@ -1,6 +1,7 @@
 import { CollisionMask } from "../screen_module/CollisionMask.js";
 import { CollisionObject } from "../screen_module/CollisionObject.js";
 import { TextBox } from "../screen_module/components/TextBox.js";
+import { CompositeObject } from "../screen_module/CompositeObject.js";
 import { GameScreen } from "../screen_module/GameScreen.js";
 import { MotionObject } from "../screen_module/MotionObject.js";
 import { PhysicsObject } from "../screen_module/PhysicsObject.js";
@@ -20,10 +21,12 @@ function Page() {
 
 
 
-    const test = new PhysicsObject(screen, 256, 256, 64, 64);
+    const test = new CompositeObject(screen, 256, 256, 32, 32);
     test.sides = 3;
     test.collisionMask.sides = 3;
-    test.weight = 20;
+    test.weight = 120;
+    test.turnSpeed = 5;
+    test.screenFollow = true;
     
 
     test.mouseDown = e => {
@@ -40,7 +43,7 @@ function Page() {
     
     const solid = new PhysicsObject(screen, 312, 128, 64, 64);
     solid.drawColor = 'purple';
-    solid.weight = 20;
+    solid.weight = 100;
     solid.moveable = true;
     solid.elasticicity = .5;
 
@@ -56,6 +59,7 @@ function Page() {
 
     const box2 = new SolidObject(screen, 128, 128, 128, 128);
     box2.direction = Math.PI/4;
+    box2.weight = 100;
     box2.drawColor = 'white';
    
 

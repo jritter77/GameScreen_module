@@ -15,17 +15,29 @@ class SolidObject extends CollisionObject {
     }
 
     solidCollision(other) {
+
+        
         
         const dir = Calc.getDir(other.x, other.y, this.x, this.y);
 
-        this.x = this.x + Math.cos(dir);
-        this.y = this.y + Math.sin(dir);
+        if (this.moveable) {
+            if (!other.moveable) {
 
-        if (!other.moveable) {
-            this.collisionMask.update();
-            other.collisionMask.update();
-            this.collision();
+                this.x = this.x + Math.cos(dir) * ((this.speed > 5) ? this.speed : 5);
+                this.y = this.y + Math.sin(dir) * ((this.speed > 5) ? this.speed : 5);
+                
+                this.collisionMask.update();
+                other.collisionMask.update();
+                this.collision();
+            }
+            else {
+                this.x = this.x + Math.cos(dir);
+                this.y = this.y + Math.sin(dir);
+            }
         }
+        
+
+        
         
 
     }

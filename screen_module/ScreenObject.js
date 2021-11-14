@@ -7,12 +7,18 @@ class ScreenObject {
         this.y = y;
         this.ancestry = this.getAncestry();
 
+        this.screenFollow = false;
+
         this.addToScreen();
     }
 
     update() {
         this.scaledX = (this.x + this.screen.xOffset/this.screen.scale)*this.screen.scale;
         this.scaledY = (this.y + this.screen.yOffset/this.screen.scale)*this.screen.scale;
+
+        if (this.screenFollow) {
+            this.focus();
+        }
     }
 
     drawBackground() {
@@ -46,6 +52,11 @@ class ScreenObject {
         }
         
         return this.types;
+    }
+
+    focus() {
+        this.screen.xOffset = -this.x  * this.screen.scale + this.screen.width/2;
+        this.screen.yOffset = -this.y  * this.screen.scale + this.screen.height/2;
     }
 
     

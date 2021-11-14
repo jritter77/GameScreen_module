@@ -2,8 +2,8 @@ import { Calc } from "./Calc.js";
 import { SolidObject } from "./SolidObject.js";
 
 class PhysicsObject extends SolidObject {
-    constructor(screen, x, y, width=32, height=32, speed=0, direction=0) {
-        super(screen, x, y, width, height, speed, direction)
+    constructor(screen, x, y, width=32, height=32, direction=0) {
+        super(screen, x, y, width, height, 0, direction)
 
         this.weight = 1;
         this.drag = 1;
@@ -13,9 +13,11 @@ class PhysicsObject extends SolidObject {
 
         this.hspeed = 0;
         this.vspeed = 0;
-        this.maxSpeed = 20;
+        this.maxSpeed = 40;
 
         this.elasticicity = 0;
+
+        this.moveable = true;
 
 
         this.setCollisionEvent('PhysicsObject', (other) => this.physCollision(other));
@@ -63,7 +65,7 @@ class PhysicsObject extends SolidObject {
             this.vspeed = -this.maxSpeed;
         }
         
-        
+        this.speed = Math.sqrt(this.hspeed**2 + this.vspeed**2);
 
         this.x += this.hspeed;
         this.y += this.vspeed;

@@ -74,6 +74,15 @@ class CollisionMask extends ScreenGrid {
         for (let mask of this.screen.masks) {
             if (mask !== this) {
                 if (Calc.collisionRect(this.x, this.y, this.width, this.height, mask.x, mask.y, mask.width, mask.height)) {
+
+                    if (this.host.master) {
+                        if (mask.host.master) {
+                            if (this.host.master === mask.host.master) {
+                                continue;
+                            }
+                        }
+                    }
+                    
                     this.gridColor = 'orange';
 
                     if (this.checkPrecCollision(mask)) {
