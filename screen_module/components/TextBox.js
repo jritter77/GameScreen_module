@@ -1,4 +1,4 @@
-import { ScreenObject } from "../ScreenObject.js";
+import { ScreenObject } from "../objects/ScreenObject.js";
 
 class TextBox extends ScreenObject {
 

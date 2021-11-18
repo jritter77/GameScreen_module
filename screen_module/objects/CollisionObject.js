@@ -1,5 +1,6 @@
-import { Calc } from "./Calc";
-import { CollisionMask } from "./CollisionMask";
+import { Calc } from "../Calc";
+import { CollisionMaskPolyRect } from "../collisionMasks/CollisionMaskPolyRect.js";
+import { CollisionMaskRect } from "../collisionMasks/CollisionMaskRect";
 import { MotionObject } from "./MotionObject.js";
 
 class CollisionObject extends MotionObject {
@@ -12,8 +13,8 @@ class CollisionObject extends MotionObject {
         this.size = Math.round(Calc.getDist(x, y, x+width, y+height) / 2);
         this.sides = 4;
 
-        this.collisionMask = new CollisionMask(this, this.x, this.y, this.size);
-        this.collisionMask.showMask = false;
+        this.collisionMask = new CollisionMaskRect(this, this.x, this.y, this.width, this.height);
+        this.collisionMask.showMask = true;
 
         this.collisionEvents = {};
 
@@ -22,6 +23,11 @@ class CollisionObject extends MotionObject {
     }
 
     
+    // Removes the ScreenObject from the GameScreen's list of current objects
+    removeFromScreen() {
+        this.screen.objects.splice(this.screen.objects.indexOf(this), 1);
+        this.screen.masks.splice(this.screen.masks.indexOf(this.collisionMask), 1);
+    }
     
 
     setCollisionEvent(targetType, action) {
@@ -62,7 +68,7 @@ class CollisionObject extends MotionObject {
  
 
     drawMiddleground() {
-        this.screen.draw.poly(this.scaledX, this.scaledY, this.size*this.screen.scale, this.sides, this.direction, this.drawColor);
+        this.screen.draw.polyRect(this.scaledX, this.scaledY, this.width*this.screen.scale, this.height*this.screen.scale, 0, this.drawColor);
     }
 }
 

@@ -1,19 +1,18 @@
-import { Calc } from "./Calc.js";
+import { Calc } from "../Calc.js";
 import { SolidObject } from "./SolidObject.js";
 
 class PhysicsObject extends SolidObject {
-    constructor(screen, x, y, width=32, height=32, direction=0) {
-        super(screen, x, y, width, height, 0, direction)
+    constructor(screen, x, y, width=32, height=32, speed=0, direction=0) {
+        super(screen, x, y, width, height, speed, direction)
 
         this.weight = 1;
         this.drag = 1;
 
-        this.acceleration = 0;
-        this.turnSpeed = 10;
+        this.acceleration = 1/30;
+        this.turnSpeed = 5;
 
         this.hspeed = 0;
         this.vspeed = 0;
-        this.maxSpeed = 40;
 
         this.elasticicity = 0;
 
@@ -42,30 +41,34 @@ class PhysicsObject extends SolidObject {
         }
 
 
-        if (this.acceleration) {
-            this.hspeed += this.acceleration * Math.cos(this.direction);
-            this.vspeed += this.acceleration * Math.sin(this.direction);
+        if (this.speed>0) {
+            this.hspeed += this.speed * this.acceleration * Math.cos(this.direction);
+            this.vspeed += this.speed * this.acceleration * Math.sin(this.direction);
+        
+            if (this.hspeed > this.speed) {
+                this.hspeed = this.speed;
+            }
+            else if (this.hspeed < -this.speed) {
+                this.hspeed = -this.speed;
+            }
+    
+            if (this.vspeed > this.speed) {
+                this.vspeed = this.speed;
+            }
+            else if (this.vspeed < -this.speed) {
+                this.vspeed = -this.speed;
+            }
+        
+        
         }
         else {
-            this.hspeed /= 1.1;
-            this.vspeed /= 1.1;
+            this.hspeed *= .9;
+            this.vspeed *= .9;
         }
 
-        if (this.hspeed > this.maxSpeed) {
-            this.hspeed = this.maxSpeed;
-        }
-        else if (this.hspeed < -this.maxSpeed) {
-            this.hspeed = -this.maxSpeed;
-        }
-
-        if (this.vspeed > this.maxSpeed) {
-            this.vspeed = this.maxSpeed;
-        }
-        else if (this.vspeed < -this.maxSpeed) {
-            this.vspeed = -this.maxSpeed;
-        }
         
-        this.speed = Math.sqrt(this.hspeed**2 + this.vspeed**2);
+        
+        this.checkCollsionAhead();
 
         this.x += this.hspeed;
         this.y += this.vspeed;

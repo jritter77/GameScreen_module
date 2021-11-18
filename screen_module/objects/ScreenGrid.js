@@ -1,4 +1,4 @@
-import { Grid } from "./Grid.js";
+import { Grid } from "../Grid.js";
 import { ScreenObject } from "./ScreenObject.js";
 
 class ScreenGrid extends ScreenObject {
@@ -54,6 +54,16 @@ class ScreenGrid extends ScreenObject {
             this.cellSize * this.screen.scale, 
             this.cellSize * this.screen.scale, 
             this.highlightColor);
+    }
+
+    highlightVals(val) {
+        for (let r=0; r<this.grid.rows; r++) {
+            for (let c=0; c<this.grid.cols; c++) {
+                if (this.grid[r][c] === val) {
+                    this.highlightCell(r, c);
+                }
+            }
+        }
     }
 
     

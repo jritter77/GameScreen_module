@@ -1,3 +1,5 @@
+import { Calc } from "./Calc.js";
+
 class Draw {
 
     constructor(canvas) {
@@ -65,6 +67,23 @@ class Draw {
         this.ctx.fillStyle = color;
         this.ctx.fill();
         this.ctx.closePath();
+    }
+
+    polyRect(x, y, width, height, angle=0, color="red") {
+        const dist = Calc.getDist(x, y, x+width/2, y+height/2);
+        const dir = Calc.getDir(x, y, x+width/2, y+height/2);
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(x+dist*Math.cos(dir+angle), y+dist*Math.sin(dir+angle));
+        this.ctx.lineTo(x+dist*Math.cos(Math.PI-dir+angle), y+dist*Math.sin(Math.PI-dir+angle));
+        this.ctx.lineTo(x+dist*Math.cos(Math.PI+dir+angle), y+dist*Math.sin(Math.PI+dir+angle));
+        this.ctx.lineTo(x+dist*Math.cos(-dir+angle), y+dist*Math.sin(-dir+angle));
+        this.ctx.lineTo(x+dist*Math.cos(dir+angle), y+dist*Math.sin(dir+angle));
+        
+        this.ctx.fillStyle = color;
+        this.ctx.fill();
+        this.ctx.closePath();
+        
     }
 
     //DRAW TEXT FUNCTIONS

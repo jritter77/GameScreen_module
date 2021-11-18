@@ -1,23 +1,15 @@
-import { Calc } from "./Calc.js";
-import { ScreenGrid } from "./ScreenGrid.js";
-import { TextBox } from "./components/TextBox.js"
+import { Calc } from "../Calc.js";
+import { ScreenGrid } from "../objects/ScreenGrid.js";
 
 
-// *** NOT SUITABLE FOR SMALL OBJECTS!!! USE COLLISION_RECT FOR SMALL OBJECTS!!! *** 
 
 class CollisionMask extends ScreenGrid {
     
-    constructor(host, x=host.x, y=host.y, size, sides=4, cellSize=4) {
-        const width = Math.ceil(size*2.1 / cellSize);
-        const height = Math.ceil(size*2.1 / cellSize);
-
-        super(host.screen, x, y, width, height, cellSize);
+    constructor(host, x=host.x, y=host.y, rows, cols, cellSize=4) {
+        super(host.screen, x, y, rows, cols, cellSize);
 
         this.host = host;
         this.collisions = [];
-
-        this.size = Math.floor(size / cellSize);
-        this.sides = sides;
 
         this.width = this.cellSize * this.grid.cols;
         this.height = this.cellSize * this.grid.rows;
@@ -34,17 +26,11 @@ class CollisionMask extends ScreenGrid {
     update() {
         super.update();
 
-        this.grid.setAll(0);
-        
-        this.grid.setPoly(this.grid.cols/2-1, this.grid.rows/2-1, this.size, this.sides, 1, this.host.direction);
-
-        this.x = Math.floor( (this.host.x - this.cellSize * (this.grid.cols/2 - 1)) / this.cellSize ) * this.cellSize;
-        this.y = Math.floor( (this.host.y - this.cellSize * (this.grid.rows/2 - 1)) / this.cellSize ) * this.cellSize;
-
-        this.checkCollision();
-
+        this.x = Math.floor(this.host.x - this.cellSize * (this.grid.cols/2)) ;
+        this.y = Math.floor(this.host.y - this.cellSize * (this.grid.rows/2)) ;
         
     }
+
 
 
     drawForeground() {
@@ -63,6 +49,19 @@ class CollisionMask extends ScreenGrid {
                 }
             }
         }
+    }
+
+
+    checkCollisionAt(x, y) {
+        this.x = Math.floor(x - this.cellSize * (this.grid.cols/2)) ;
+        this.y = Math.floor(y - this.cellSize * (this.grid.rows/2)) ;
+
+        this.checkCollision();
+
+        this.x = Math.floor(this.host.x - this.cellSize * (this.grid.cols/2)) ;
+        this.y = Math.floor(this.host.y - this.cellSize * (this.grid.rows/2)) ;
+        
+        return this.collisions;
     }
 
 

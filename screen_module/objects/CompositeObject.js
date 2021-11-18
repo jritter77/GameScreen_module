@@ -1,4 +1,4 @@
-import { Calc } from "./Calc";
+import { Calc } from "../Calc";
 import { CollisionObject } from "./CollisionObject";
 import { PhysicsObject } from "./PhysicsObject.js";
 import { SolidObject } from "./SolidObject";

@@ -1,6 +1,14 @@
 import { ScreenObject } from "./ScreenObject.js";
-import { Calc } from "./Calc.js";
+import { Calc } from "../Calc.js";
 
+
+/**
+ * MOTION OBJECT
+ * 
+ * Child of ScreenObject
+ * 
+ * Has variables and methods used to move object around screen
+ */
 
 class MotionObject extends ScreenObject {
 
@@ -29,10 +37,10 @@ class MotionObject extends ScreenObject {
     }
 
 
-
+    // Causes the object to move according to speed and direction
     move() {
 
-        // Check if object is currently following a target
+        // Check if object is currently following a target, set motion towards target if true
         if (this.follow) {
 
             if (!this.target.x || !this.target.y) {
@@ -48,42 +56,49 @@ class MotionObject extends ScreenObject {
             
         }
 
+        // update objects position
         this.x = this.x + this.speed * Math.cos(this.direction);
         this.y = this.y + this.speed * Math.sin(this.direction);
 
     }
 
 
+    // Moves object to given coordinate
     moveTo(x, y) {
         this.x = x;
         this.y = y;
     }
 
+    // Snaps object to nearest rounded coordinate
     snapTo(x, y, cellsize) {
         this.x = Math.round(x/cellsize) * cellsize;
         this.y = Math.round(y/cellsize) * cellsize;
     }
 
+    // Sets the speed and direction of the object
     setMotion(speed, dir) {
         this.speed = speed;
         this.direction = dir;
     }
 
+    // Stops ths object from moving
     stopMotion() {
         this.speed = 0;
     }
 
-    
+    // Sets the objects speed and points direction towards given point
     moveTowardsPoint(x, y, speed) {
         const dir = Calc.getDir(this.x, this.y, x, y);
         this.setMotion(speed, dir);
     }
 
+    // Sets the object to follow a target object
     setFollow(target, speed) {
         this.follow = true;
         this.speed = speed;
         this.target = target;
     }
+    
 
 
 }

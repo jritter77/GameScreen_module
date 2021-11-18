@@ -1,5 +1,4 @@
 import { Calc } from "./Calc";
-import { ScreenObject } from "./ScreenObject";
 
 class Grid extends Array {
 
@@ -59,17 +58,17 @@ class Grid extends Array {
     setLine(p1, p2, val) {
         const cells = [];
 
-        const slope = Calc.getSlope(p1.x, p1.y, p2.x, p2.y);
+        const slope = Calc.getSlope(p1.col, p1.row, p2.col, p2.row);
         
         // If Slope is approaching vertical, find cols as a function of rows
         if (slope < -1 || slope > 1) {
 
-            const start = Math.min(p1.y, p2.y);
-            const end = Math.max(p1.y, p2.y);
+            const start = Math.min(p1.row, p2.row);
+            const end = Math.max(p1.row, p2.row);
             const f = Calc.getLineX;
 
             for (let row=start; row<end; row++) {
-                const col = Math.floor( f(row, slope, p1.x, p1.y) );
+                const col = Math.floor( f(row, slope, p1.col, p1.row) );
                 this[row][col] = val;
                 cells.push({row: row, col: col});
             }
@@ -79,12 +78,12 @@ class Grid extends Array {
         // Else find rows as a function of cols
         else {
 
-            const start = Math.min(p1.x, p2.x);
-            const end = Math.max(p1.x, p2.x);
+            const start = Math.min(p1.col, p2.col);
+            const end = Math.max(p1.col, p2.col);
             const f = Calc.getLineY;
 
             for (let col=start; col<end; col++) {
-                const row = Math.floor( f(col, slope, p1.x, p1.y) );
+                const row = Math.floor( f(col, slope, p1.col, p1.row) );
                 this[row][col] = val;
                 cells.push({row: row, col: col});
             }
@@ -130,52 +129,89 @@ class Grid extends Array {
     
     
 
-    setPoly(x, y, size, sides, val, angle=0){
+    setPoly(row, col, size, sides, val, angle=0, fill=false){
 
         const spread = (Math.PI*2)/sides;
 
-        let xVals = [];
-        let yVals = [];
+        let colVals = [];
+        let rowVals = [];
 
-        let curX = Math.round(x + size*Math.cos(angle));
-        let curY = Math.round(y + size*Math.sin(angle));
+        let curCol = Math.round(col + size*Math.cos(angle));
+        let curRow = Math.round(row + size*Math.sin(angle));
 
         // set lines of polygon
         for (let i=1; i<sides+1; i++) {
 
-            const nextX = Math.floor(x + size*Math.cos(angle + spread*i));
-            const nextY = Math.floor(y + size*Math.sin(angle + spread*i));
+            const nextCol = Math.floor(col + size*Math.cos(angle + spread*i));
+            const nextRow = Math.floor(row + size*Math.sin(angle + spread*i));
 
-            this.setLine({x: curX, y: curY}, {x: nextX, y: nextY}, val);
+            this.setLine({col: curCol, row: curRow}, {col: nextCol, row: nextRow}, val);
 
-            xVals.push(curX, nextX);
-            yVals.push(curY, nextY);
+            colVals.push(curCol, nextCol);
+            rowVals.push(curRow, nextRow);
 
 
-            curX = nextX;
-            curY = nextY;
+            curCol = nextCol;
+            curRow = nextRow;
 
         }
 
 
         // fill in area within lines
-        for (let r=Math.min(...yVals)+1; r<Math.max(...yVals); r++) {
+        if (fill) {
+            for (let r=Math.min(...rowVals)+1; r<Math.max(...rowVals); r++) {
 
-            let start = this[r].indexOf(val);
-            let end = this[r].lastIndexOf(val);
-
-
-            if (end <= start) {
-                end = this[r-1].lastIndexOf(val)+1;
-            } 
-
-            for (let c=start; c<end; c++) {
-                    this[r][c] = val;
+                let start = this[r].indexOf(val);
+                let end = this[r].lastIndexOf(val);
+    
+    
+                if (end <= start) {
+                    end = this[r-1].lastIndexOf(val)+1;
+                } 
+    
+                for (let c=start; c<end; c++) {
+                        this[r][c] = val;
+                }
+    
             }
-
         }
 
         
+    }
+
+
+    setPolyRect(row, col, width, height, val, angle=0, fill=false) {
+        const dist = Math.floor(Calc.getDist(col, row, col+width/2, row+height/2));
+        const dir = Calc.getDir(col, row, col+width/2, row+height/2);
+
+        const p1 = {row: row + Math.floor(dist*Math.sin(dir+angle)), col: col + Math.floor(dist*Math.cos(dir+angle))};
+        const p2 = {row: row + Math.floor(dist*Math.sin(Math.PI-dir+angle)), col: col + Math.floor(dist*Math.cos(Math.PI-dir+angle))};
+        const p3 = {row: row + Math.floor(dist*Math.sin(Math.PI+dir+angle)), col: col + Math.floor(dist*Math.cos(Math.PI+dir+angle))};
+        const p4 = {row: row + Math.floor(dist*Math.sin(-dir+angle)), col: col + Math.floor(dist*Math.cos(-dir+angle))};
+
+
+        this.setLine(p1, p2, val);
+        this.setLine(p2, p3, val);
+        this.setLine(p3, p4, val);
+        this.setLine(p4, p1, val);
+
+        if (fill) {
+
+            const rowStart = Math.min(p1.row, p2.row, p3.row, p4.row);
+            const rowEnd = Math.max(p1.row, p2.row, p3.row, p4.row);
+            
+
+            for (let r=rowStart+1; r<rowEnd; r++) {
+
+                const colStart = this[r].indexOf(val);
+                const colEnd = this[r].lastIndexOf(val);
+
+                for (let c=colStart+1; c<colEnd; c++) {
+                    this[r][c] = val;
+                }
+            }
+
+        }
     }
 }
 
