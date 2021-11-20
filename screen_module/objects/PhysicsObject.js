@@ -13,8 +13,10 @@ class PhysicsObject extends SolidObject {
 
         this.hspeed = 0;
         this.vspeed = 0;
+        this.maxSpeed = 40;
 
-        this.elasticicity = 0;
+        this.friction = .01;
+        this.elasticicity = .1;
 
         this.moveable = true;
 
@@ -41,32 +43,28 @@ class PhysicsObject extends SolidObject {
         }
 
 
-        if (this.speed>0) {
-            this.hspeed += this.speed * this.acceleration * Math.cos(this.direction);
-            this.vspeed += this.speed * this.acceleration * Math.sin(this.direction);
-        
-            if (this.hspeed > this.speed) {
-                this.hspeed = this.speed;
-            }
-            else if (this.hspeed < -this.speed) {
-                this.hspeed = -this.speed;
-            }
-    
-            if (this.vspeed > this.speed) {
-                this.vspeed = this.speed;
-            }
-            else if (this.vspeed < -this.speed) {
-                this.vspeed = -this.speed;
-            }
-        
-        
+        if (this.speed) {
+            this.hspeed += this.speed*this.acceleration * Math.cos(this.direction);
+            this.vspeed += this.speed*this.acceleration * Math.sin(this.direction);
         }
         else {
-            this.hspeed *= .9;
-            this.vspeed *= .9;
+            this.hspeed /= 1 + this.friction * (this.weight/20);
+            this.vspeed /= 1 + this.friction * (this.weight/20);
         }
 
-        
+        if (this.hspeed > this.maxSpeed) {
+            this.hspeed = this.maxSpeed;
+        }
+        else if (this.hspeed < -this.maxSpeed) {
+            this.hspeed = -this.maxSpeed;
+        }
+
+        if (this.vspeed > this.maxSpeed) {
+            this.vspeed = this.maxSpeed;
+        }
+        else if (this.vspeed < -this.maxSpeed) {
+            this.vspeed = -this.maxSpeed;
+        }
         
         this.checkCollsionAhead();
 
@@ -111,24 +109,58 @@ class PhysicsObject extends SolidObject {
 
         const totalWeight = this.weight + other.weight;
 
+        const dir = Calc.getDir(other.x, other.y, this.x, this.y);
+
         this.hspeed = hm / totalWeight;
         this.vspeed = vm / totalWeight;
 
-
         if (this.elasticicity) {
-            const dir = Calc.getDir(other.x, other.y, this.x, this.y);
-
-            this.hspeed += ((Math.abs(hm)/this.weight) * Math.cos(dir)) * this.elasticicity;
-            this.vspeed += ((Math.abs(vm)/this.weight) * Math.sin(dir)) * this.elasticicity;
-
-            other.hspeed += ((Math.abs(hm)/other.weight) * -Math.cos(dir)) * other.elasticicity;
-            other.vspeed += ((Math.abs(vm)/other.weight) * -Math.sin(dir)) * other.elasticicity;
+            this.hspeed += Math.cos(dir)*Math.abs(this.elasticicity*this.hspeed);
+            this.vspeed += Math.sin(dir)*Math.abs(this.elasticicity*this.vspeed);
         }
         
         
-        
-        
     }
+
+    
+    checkCollsionAhead() {
+        if (this.moveable) {
+
+            const buffer = this.collisionMask.cellSize * 2;
+            const hmod = this.hspeed/Math.abs(this.hspeed);
+            const vmod = this.vspeed/Math.abs(this.vspeed);
+            
+
+            if (this.hspeed !== 0) {
+                const collisions = this.collisionMask.checkCollisionAt(this.x + buffer*hmod, this.y);
+                for (let c of collisions) {
+                    if (c.ancestry.includes('SolidObject')) {
+                        if (!c.moveable) {
+                            this.hspeed *= -this.elasticicity;
+                        }
+                    }
+                }
+            }
+        
+
+            if (this.vspeed !== 0) {
+                const collisions = this.collisionMask.checkCollisionAt(this.x, this.y + buffer*vmod);
+                for (let c of collisions) {
+                    if (c.ancestry.includes('SolidObject')) {
+                        if (!c.moveable) {
+                            this.vspeed *= -this.elasticicity;
+                        }
+
+                    }
+                }
+            } 
+
+        }
+
+    }
+    
+
+    
 }
 
 export {PhysicsObject}

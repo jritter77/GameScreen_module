@@ -50,10 +50,13 @@ class SolidObject extends CollisionObject {
         if (other.moveable) {
             other.moveTo(other.x + this.hspeed, other.y + this.vspeed);
         }
-        else {
+    
+        if (this.moveable) {
             const dir = Calc.getDir(other.x, other.y, this.x, this.y);
-            this.moveTo(this.x + Math.cos(dir)*5, this.y + Math.sin(dir)*5);
-        }
+            this.moveTo(this.x + Math.cos(dir)*2, this.y + Math.sin(dir));
+        }  
+        
+        
 
     }
 
