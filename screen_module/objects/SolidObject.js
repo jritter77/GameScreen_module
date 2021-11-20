@@ -47,7 +47,7 @@ class SolidObject extends CollisionObject {
 
     solidCollision(other) {
 
-        if (other.moveable) {
+        if (other.moveable && !other.ancestry.includes('PhysicsObject')) {
             other.moveTo(other.x + this.hspeed, other.y + this.vspeed);
         }
     
@@ -69,7 +69,7 @@ class SolidObject extends CollisionObject {
             
 
             if (this.hspeed !== 0) {
-                const collisions = this.collisionMask.checkCollisionAt(this.x + buffer*hmod, this.y);
+                const collisions = this.collisionMask.checkCollisionAt(this.x + this.hspeed + buffer*hmod, this.y);
                 for (let c of collisions) {
                     if (c.ancestry.includes('SolidObject')) {
                         if (!c.moveable) {
@@ -81,7 +81,7 @@ class SolidObject extends CollisionObject {
         
 
             if (this.vspeed !== 0) {
-                const collisions = this.collisionMask.checkCollisionAt(this.x, this.y + buffer*vmod);
+                const collisions = this.collisionMask.checkCollisionAt(this.x, this.y + this.vspeed + buffer*vmod);
                 for (let c of collisions) {
                     if (c.ancestry.includes('SolidObject')) {
                         if (!c.moveable) {

@@ -10,6 +10,7 @@ class CollisionMask extends ScreenGrid {
 
         this.host = host;
         this.collisions = [];
+        this.processed = [];
 
         this.width = this.cellSize * this.grid.cols;
         this.height = this.cellSize * this.grid.rows;
@@ -25,6 +26,8 @@ class CollisionMask extends ScreenGrid {
 
     update() {
         super.update();
+
+        this.processed = [];
 
         this.x = Math.floor(this.host.x - this.cellSize * (this.grid.cols/2)) ;
         this.y = Math.floor(this.host.y - this.cellSize * (this.grid.rows/2)) ;
@@ -71,9 +74,11 @@ class CollisionMask extends ScreenGrid {
         this.gridColor = 'grey';
 
         for (let mask of this.screen.masks) {
-            if (mask !== this) {
+            if (mask !== this  && !mask.processed.includes(this)) {
                 if (Calc.collisionRect(this.x, this.y, this.width, this.height, mask.x, mask.y, mask.width, mask.height)) {
 
+                    this.processed.push(mask);
+                    
                     if (this.host.master) {
                         if (mask.host.master) {
                             if (this.host.master === mask.host.master) {

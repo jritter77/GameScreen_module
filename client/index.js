@@ -17,7 +17,7 @@ function Page() {
     test.target = screen.mouse;
     test.follow = true;
     test.moveable = true;
-    test.weight = 100;
+    test.weight = 50;
 
     test.mouseDown = () => {
         test.speed = 5;
@@ -28,17 +28,19 @@ function Page() {
     }
 
     const heavy = new SolidObject(screen, 256, 256, 256, 64);
-    heavy.weight = 100;
+    heavy.weight = 10;
 
     const med = new PhysicsObject(screen, 512, 128, 64, 64);
-    med.weight = 50;
+    med.weight = 5;
     med.moveable = true;
-    med.elasticicity = .5;
+    med.elastic = true;
+    med.friction = .03;
 
     const light = new PhysicsObject(screen, 320, 128);
-    light.weight = 10;
-    light.elasticicity = 1;
+    light.weight = 5;
     light.moveable = true;
+    light.friction = .01;
+    light.elastic = true;
     
     
 

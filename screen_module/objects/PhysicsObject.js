@@ -15,8 +15,8 @@ class PhysicsObject extends SolidObject {
         this.vspeed = 0;
         this.maxSpeed = 40;
 
-        this.friction = .01;
-        this.elasticicity = .1;
+        this.friction = .1;
+        this.elastic = false;
 
         this.moveable = true;
 
@@ -48,8 +48,8 @@ class PhysicsObject extends SolidObject {
             this.vspeed += this.speed*this.acceleration * Math.sin(this.direction);
         }
         else {
-            this.hspeed /= 1 + this.friction * (this.weight/20);
-            this.vspeed /= 1 + this.friction * (this.weight/20);
+            this.hspeed /= 1 + this.friction;
+            this.vspeed /= 1 + this.friction;
         }
 
         if (this.hspeed > this.maxSpeed) {
@@ -103,40 +103,57 @@ class PhysicsObject extends SolidObject {
     }
 
     physCollision(other) {
-        
+
         const hm = (this.weight * this.hspeed) + (other.weight * other.hspeed);
         const vm = (this.weight * this.vspeed) + (other.weight * other.vspeed);
 
         const totalWeight = this.weight + other.weight;
 
-        const dir = Calc.getDir(other.x, other.y, this.x, this.y);
+        if (this.elastic && other.elastic) {
 
-        this.hspeed = hm / totalWeight;
-        this.vspeed = vm / totalWeight;
+            const h1 = other.weight*other.hspeed / this.weight;
+            const v1 = other.weight*other.vspeed / this.weight;
 
-        if (this.elasticicity) {
-            this.hspeed += Math.cos(dir)*Math.abs(this.elasticicity*this.hspeed);
-            this.vspeed += Math.sin(dir)*Math.abs(this.elasticicity*this.vspeed);
+            const h2 = this.weight*this.hspeed / other.weight;
+            const v2 = this.weight*this.vspeed / other.weight;
+
+            this.hspeed = h1;
+            this.vspeed = v1;
+
+            other.hspeed = h2;
+            other.vspeed = v2;
+
         }
+        else {
+
+            this.hspeed = hm / totalWeight;
+            this.vspeed = vm / totalWeight;
+
+            other.hspeed = hm / totalWeight;
+            other.vspeed = vm / totalWeight;
+
+        }
+
+        
         
         
     }
 
-    
+
     checkCollsionAhead() {
         if (this.moveable) {
 
-            const buffer = this.collisionMask.cellSize * 2;
+            const buffer = this.collisionMask.cellSize * 1;
             const hmod = this.hspeed/Math.abs(this.hspeed);
             const vmod = this.vspeed/Math.abs(this.vspeed);
             
 
             if (this.hspeed !== 0) {
-                const collisions = this.collisionMask.checkCollisionAt(this.x + buffer*hmod, this.y);
+                const collisions = this.collisionMask.checkCollisionAt(this.x + this.hspeed+buffer*hmod, this.y);
                 for (let c of collisions) {
                     if (c.ancestry.includes('SolidObject')) {
                         if (!c.moveable) {
-                            this.hspeed *= -this.elasticicity;
+                            this.hspeed *= -this.elastic;
                         }
                     }
                 }
@@ -144,11 +161,11 @@ class PhysicsObject extends SolidObject {
         
 
             if (this.vspeed !== 0) {
-                const collisions = this.collisionMask.checkCollisionAt(this.x, this.y + buffer*vmod);
+                const collisions = this.collisionMask.checkCollisionAt(this.x, this.y + this.vspeed+buffer*vmod);
                 for (let c of collisions) {
                     if (c.ancestry.includes('SolidObject')) {
                         if (!c.moveable) {
-                            this.vspeed *= -this.elasticicity;
+                            this.vspeed *= -this.elastic;
                         }
 
                     }
@@ -158,6 +175,8 @@ class PhysicsObject extends SolidObject {
         }
 
     }
+    
+    
     
 
     
