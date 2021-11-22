@@ -47,7 +47,7 @@ class SolidObject extends CollisionObject {
 
     solidCollision(other) {
 
-        if (other.moveable && !other.ancestry.includes('PhysicsObject')) {
+        if (other.moveable) {
             other.moveTo(other.x + this.hspeed, other.y + this.vspeed);
         }
     

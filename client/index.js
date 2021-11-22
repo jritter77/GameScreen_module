@@ -18,7 +18,6 @@ function Page() {
     test.follow = true;
     test.moveable = true;
     test.weight = 50;
-    test.elastic = true;
 
     test.mouseDown = () => {
         test.speed = 5;

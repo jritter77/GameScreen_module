@@ -60,6 +60,11 @@ class ScreenObject {
     // Removes the ScreenObject from the GameScreen's list of current objects
     removeFromScreen() {
         this.screen.objects.splice(this.screen.objects.indexOf(this), 1);
+
+        // Remove collsion mask if object has one
+        if (this.collisionMassk) {
+            this.screen.masks.splice(this.screen.masks.indexOf(this.collisionMassk), 1);
+        }
     }
 
     // Returns an array containing all inherited types up to ScreenObject

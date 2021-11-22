@@ -5,7 +5,7 @@ import { ScreenGrid } from "../objects/ScreenGrid.js";
 
 class CollisionMask extends ScreenGrid {
     
-    constructor(host, x=host.x, y=host.y, rows, cols, cellSize=4) {
+    constructor(host, x, y, rows, cols, cellSize=4) {
         super(host.screen, x, y, rows, cols, cellSize);
 
         this.host = host;

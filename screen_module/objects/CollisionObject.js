@@ -1,5 +1,4 @@
 import { Calc } from "../Calc";
-import { CollisionMaskDisc } from "../collisionMasks/CollisionMaskDisc.js";
 import { CollisionMaskPolyRect } from "../collisionMasks/CollisionMaskPolyRect.js";
 import { CollisionMaskRect } from "../collisionMasks/CollisionMaskRect";
 import { MotionObject } from "./MotionObject.js";
@@ -14,7 +13,7 @@ class CollisionObject extends MotionObject {
         this.size = Math.round(Calc.getDist(x, y, x+width, y+height) / 2);
         this.sides = 4;
 
-        this.collisionMask = new CollisionMaskDisc(this, this.x, this.y);
+        this.collisionMask = new CollisionMaskRect(this);
         this.collisionMask.showMask = true;
 
         this.collisionEvents = {};
@@ -69,7 +68,7 @@ class CollisionObject extends MotionObject {
  
 
     drawMiddleground() {
-        this.screen.draw.circle(this.scaledX, this.scaledY, 32*this.screen.scale);
+        this.screen.draw.polyRect(this.scaledX, this.scaledY, this.width*this.screen.scale, this.height*this.screen.scale, 0, this.drawColor);
     }
 }
 

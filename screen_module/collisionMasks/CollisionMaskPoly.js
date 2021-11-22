@@ -5,7 +5,7 @@ import { CollisionMask } from "./CollisionMask.js";
 
 class CollisionMaskPoly extends CollisionMask {
     
-    constructor(host, x=host.x, y=host.y, size=32, sides=4, cellSize=4) {
+    constructor(host, x=host.x, y=host.y, size=host.width/2, sides=4, cellSize=4) {
         const s = Math.ceil(size*2.2 / cellSize);
 
         super(host, x, y, s, s, cellSize);
