@@ -37,9 +37,14 @@ class Part extends PhysicsObject {
 
 
     move() {
+
+        this.checkCollsionAhead();
+
         this.direction = this.master.direction+(Math.PI/4);
         this.x = this.master.x + this.dist * Math.cos(this.dir + this.master.direction);
         this.y = this.master.y + this.dist * Math.sin(this.dir + this.master.direction);
+
+        
     }
 
 
@@ -85,6 +90,46 @@ class Part extends PhysicsObject {
             }
         }
     }
+
+
+
+    checkCollsionAhead() {
+        if (this.moveable) {
+
+            const buffer = this.collisionMask.cellSize * 5;
+            const hmod = (this.master.hspeed !== 0) ? this.master.hspeed/Math.abs(this.master.hspeed) : 1;
+            const vmod = (this.master.vspeed !== 0) ? this.master.vspeed/Math.abs(this.master.vspeed) : 1;
+            
+
+            if (this.master.hspeed !== 0) {
+                const collisions = this.collisionMask.checkCollisionAt(this.x+buffer*hmod, this.y);
+                for (let c of collisions) {
+                    if (c.ancestry.includes('SolidObject')) {
+                        if (!c.moveable) {
+                            this.master.hspeed *= -this.master.elastic;
+                        }
+                    }
+                }
+            }
+        
+
+            if (this.master.vspeed !== 0) {
+                const collisions = this.collisionMask.checkCollisionAt(this.x, this.y+buffer*vmod );
+                for (let c of collisions) {
+                    if (c.ancestry.includes('SolidObject')) {
+                        if (!c.moveable) {
+                            this.master.vspeed *= -this.master.elastic;
+                        }
+
+                    }
+                }
+            } 
+
+        }
+
+    }
+
+    
 }
 
 

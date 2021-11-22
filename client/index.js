@@ -13,11 +13,12 @@ function Page() {
 
     screen.animationStart();
     
-    const test = new PhysicsObject(screen, 128, 128, 64, 64);
+    const test = new CompositeObject(screen, 128, 128, 64, 64);
     test.target = screen.mouse;
     test.follow = true;
     test.moveable = true;
     test.weight = 50;
+    test.elastic = true;
 
     test.mouseDown = () => {
         test.speed = 5;
@@ -31,7 +32,7 @@ function Page() {
     heavy.weight = 10;
 
     const med = new PhysicsObject(screen, 512, 128, 64, 64);
-    med.weight = 5;
+    med.weight = 20;
     med.moveable = true;
     med.elastic = true;
     med.friction = .03;

@@ -13,7 +13,7 @@ class PhysicsObject extends SolidObject {
 
         this.hspeed = 0;
         this.vspeed = 0;
-        this.maxSpeed = 40;
+        this.maxSpeed = 10;
 
         this.friction = .1;
         this.elastic = false;
@@ -144,8 +144,8 @@ class PhysicsObject extends SolidObject {
         if (this.moveable) {
 
             const buffer = this.collisionMask.cellSize * 1;
-            const hmod = this.hspeed/Math.abs(this.hspeed);
-            const vmod = this.vspeed/Math.abs(this.vspeed);
+            const hmod = (this.hspeed !== 0) ? this.hspeed/Math.abs(this.hspeed) : 1;
+            const vmod = (this.vspeed !== 0) ? this.vspeed/Math.abs(this.vspeed) : 1;
             
 
             if (this.hspeed !== 0) {

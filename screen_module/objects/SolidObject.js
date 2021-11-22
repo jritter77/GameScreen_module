@@ -53,7 +53,7 @@ class SolidObject extends CollisionObject {
     
         if (this.moveable) {
             const dir = Calc.getDir(other.x, other.y, this.x, this.y);
-            this.moveTo(this.x + Math.cos(dir)*2, this.y + Math.sin(dir));
+            this.moveTo(this.x + Math.cos(dir)*5, this.y + Math.sin(dir)*5);
         }  
         
         
@@ -64,8 +64,8 @@ class SolidObject extends CollisionObject {
         if (this.moveable) {
 
             const buffer = this.collisionMask.cellSize * 2;
-            const hmod = this.hspeed/Math.abs(this.hspeed);
-            const vmod = this.vspeed/Math.abs(this.vspeed);
+            const hmod = (this.hspeed !== 0) ? this.hspeed/Math.abs(this.hspeed) : 1;
+            const vmod = (this.vspeed !== 0) ? this.vspeed/Math.abs(this.vspeed) : 1;
             
 
             if (this.hspeed !== 0) {

@@ -105,7 +105,7 @@ class Grid extends Array {
     }
 
 
-    setDisk(row, col, radius, val) {
+    setDisc(row, col, radius, val) {
         const d= radius * 2;
         const cells = [];
 
