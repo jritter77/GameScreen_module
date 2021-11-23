@@ -16,6 +16,8 @@ class ScreenObject {
         this.y = y;
         this.ancestry = this.getAncestry();
 
+        this.active = true;
+
         this.mousePressed = false;
 
         this.screenFollow = false;
@@ -62,7 +64,8 @@ class ScreenObject {
         this.screen.objects.splice(this.screen.objects.indexOf(this), 1);
 
         // Remove collsion mask if object has one
-        if (this.collisionMassk) {
+        if (this.collisionMask) {
+
             this.screen.masks.splice(this.screen.masks.indexOf(this.collisionMassk), 1);
         }
     }

@@ -5,6 +5,8 @@ import { PhysicsObject } from "../screen_module/objects/PhysicsObject.js";
 import { SolidObject } from "../screen_module/objects/SolidObject.js";
 import { ScreenGrid } from "../screen_module/objects/ScreenGrid.js";
 import { CollisionObject } from "../screen_module/objects/CollisionObject.js";
+import { Editor } from "../editor_module/Editor.js";
+import { Button } from "../screen_module/components/Button.js";
 
 function Page() {
     const screen = new GameScreen();
@@ -12,37 +14,19 @@ function Page() {
     $('#app').append(screen.canvas);
 
     screen.animationStart();
+
+    const defaultList = [{obj: 'testObject', x: 128, y: 128}, {obj: 'testObject', x: 256, y: 256}];
     
-    const test = new CompositeObject(screen, 128, 128, 64, 64);
-    test.target = screen.mouse;
-    test.follow = true;
-    test.moveable = true;
-    test.weight = 50;
+    localStorage.setItem('default', JSON.stringify(defaultList));
 
-    test.mouseDown = () => {
-        test.speed = 5;
-    }
+    const editor = new Editor(screen, 0, 0);
 
-    test.mouseUp = () => {
-        test.speed = 0;
-    }
+    const testList = JSON.parse(localStorage.getItem('testList'));
 
-    const heavy = new SolidObject(screen, 256, 256, 256, 64);
-    heavy.weight = 10;
+    editor.loadObjects(testList);
 
-    const med = new PhysicsObject(screen, 512, 128, 64, 64);
-    med.weight = 20;
-    med.moveable = true;
-    med.elastic = true;
-    med.friction = .03;
-
-    const light = new PhysicsObject(screen, 320, 128);
-    light.weight = 5;
-    light.moveable = true;
-    light.friction = .01;
-    light.elastic = true;
     
-    
+
 
 }
 

@@ -16,6 +16,9 @@ class TextBox extends ScreenObject {
         this.borderWidth = 4;
         this.borderColor = "blue";
 
+        this.width;
+        this.height;
+
         this.getMsgDimensions();
     }
 

@@ -18,7 +18,9 @@ class MouseInput {
         //triggers anytime mouse is clicked
         for (let obj of this.screen.objects) {
             if (obj.mouseDown) {
-                obj.mouseDown(e);
+                if (obj.active) {
+                    obj.mouseDown(e);
+                }
             }
         }
     }
@@ -28,7 +30,9 @@ class MouseInput {
         //triggers anytime mouse is released
         for (let obj of this.screen.objects) {
             if (obj.mouseUp) {
-                obj.mouseUp(e);
+                if (obj.active) {
+                    obj.mouseUp(e);
+                }
             }
         }
     }

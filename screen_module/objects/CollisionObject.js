@@ -23,12 +23,6 @@ class CollisionObject extends MotionObject {
     }
 
     
-    // Removes the ScreenObject from the GameScreen's list of current objects
-    removeFromScreen() {
-        this.screen.objects.splice(this.screen.objects.indexOf(this), 1);
-        this.screen.masks.splice(this.screen.masks.indexOf(this.collisionMask), 1);
-    }
-    
 
     setCollisionEvent(targetType, action) {
         this.collisionEvents[targetType] = action;

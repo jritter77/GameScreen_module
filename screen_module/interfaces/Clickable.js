@@ -1,9 +1,10 @@
 import {Calc} from "../Calc.js";
 
-function Clickable() {
+function Clickable(xOffset=0, yOffset=0) {
 
     this.checkMouse = () => {
-        return Calc.pointInRect(this.screen.scaledMouseX, this.screen.scaledMouseY, this.x, this.y, this.width, this.height);
+        return Calc.pointInRect(this.screen.scaledMouseX, this.screen.scaledMouseY, this.scaledX+xOffset*this.screen.scale, this.scaledY+yOffset*this.screen.scale, 
+            this.width*this.screen.scale, this.height*this.screen.scale);
     }
 
     this.setMouseDown = (foo) => {

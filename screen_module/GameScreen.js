@@ -93,7 +93,9 @@ class GameScreen {
     // Calls update event for all current screen objects
     updateObjects() {
         for (let obj of this.objects) {
-            obj.update();
+            if (obj.active) {
+                obj.update();
+            }
         }
     }
 
@@ -101,7 +103,7 @@ class GameScreen {
     // Calls collision event (if present) for all screen objects
     processCollisions() {
         for (let obj of this.objects) {
-            if (obj.collision) {
+            if (obj.collision && obj.active) {
                 obj.collisionMask.checkCollision();
                 obj.collision();
             }
@@ -113,20 +115,26 @@ class GameScreen {
 
     drawBackground() {
         for (let obj of this.objects) {
-            obj.drawBackground();
+            if (obj.active) {
+                obj.drawBackground();
+            }
         }
     }
 
     drawMiddleground() {
         for (let obj of this.objects) {
-            obj.drawMiddleground();
+            if (obj.active) {
+                obj.drawMiddleground();
+            }
         }
     }
 
     drawForeground() {
         this.mouse.dispMouseCoord();
         for (let obj of this.objects) {
-            obj.drawForeground();
+            if (obj.active) {
+                obj.drawForeground();
+            }
         }
     }
 
