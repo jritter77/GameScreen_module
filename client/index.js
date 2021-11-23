@@ -7,6 +7,7 @@ import { ScreenGrid } from "../screen_module/objects/ScreenGrid.js";
 import { CollisionObject } from "../screen_module/objects/CollisionObject.js";
 import { Editor } from "../editor_module/Editor.js";
 import { Button } from "../screen_module/components/Button.js";
+import { TextBox } from "../screen_module/components/TextBox.js";
 
 function Page() {
     const screen = new GameScreen();
@@ -25,7 +26,10 @@ function Page() {
 
     editor.loadObjects(testList);
 
-    
+    const mouseCoords = new TextBox(screen, 0, 0, "99999999999\n\n");
+    mouseCoords.update = () => {
+        mouseCoords.msg = `X: ${screen.scaledMouseX}\nY: ${screen.scaledMouseY}`;
+    }
 
 
 }

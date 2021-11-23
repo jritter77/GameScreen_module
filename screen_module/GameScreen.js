@@ -68,8 +68,8 @@ class GameScreen {
             this.draw.clearScreen();
 
             // Computes the coordinates of the mouse on the screen relative to the screen's offset and scale
-            this.scaledMouseX = (this.mouse.x - this.xOffset)/this.scale;
-            this.scaledMouseY = (this.mouse.y - this.yOffset)/this.scale;
+            this.scaledMouseX = Math.round( (this.mouse.x - this.xOffset)/this.scale );
+            this.scaledMouseY = Math.round( (this.mouse.y - this.yOffset)/this.scale );
 
             this.updateObjects();
             this.processCollisions();
@@ -130,7 +130,6 @@ class GameScreen {
     }
 
     drawForeground() {
-        this.mouse.dispMouseCoord();
         for (let obj of this.objects) {
             if (obj.active) {
                 obj.drawForeground();
