@@ -3,7 +3,7 @@ import { Clickable } from "../screen_module/interfaces/Clickable.js";
 import { PhysicsObject } from "../screen_module/objects/PhysicsObject.js";
 import { ScreenObject } from "../screen_module/objects/ScreenObject.js";
 import { SolidObject } from "../screen_module/objects/SolidObject";
-import { EditorObject, TestObject } from "./EditorObject.js";
+import { EditorObject, TestObject, TestObject2, TestObject3 } from "./EditorObject.js";
 import { LoadButton } from "./LoadButton.js";
 import { SaveButton } from "./SaveButton.js";
 import { TestButton } from "./TestButton.js";
@@ -14,7 +14,9 @@ import { TestButton } from "./TestButton.js";
 class Editor extends ScreenObject {
 
     static ObjectList = {
-        testObject: TestObject
+        testObject: TestObject,
+        testObject2: TestObject2,
+        testObject3: TestObject3
     };
 
     constructor(screen, x, y) {
@@ -29,6 +31,10 @@ class Editor extends ScreenObject {
         this.testButton = new TestButton(this);
 
         
+    }
+
+    addEditorObject(objectType, x, y) {
+        this.objects.push(new EditorObject(this, objectType, x, y));
     }
 
     removeEditorObjects() {

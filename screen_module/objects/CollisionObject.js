@@ -14,7 +14,7 @@ class CollisionObject extends MotionObject {
         this.sides = 4;
 
         this.collisionMask = new CollisionMaskRect(this);
-        this.collisionMask.showMask = true;
+        this.collisionMask.showMask = false;
 
         this.collisionEvents = {};
 

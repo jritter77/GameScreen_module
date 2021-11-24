@@ -1,6 +1,7 @@
 import { Clickable } from "../screen_module/interfaces/Clickable.js";
 import { PhysicsObject } from "../screen_module/objects/PhysicsObject.js";
 import { ScreenObject } from "../screen_module/objects/ScreenObject.js";
+import { SolidObject } from "../screen_module/objects/SolidObject.js";
 import { Editor } from "./Editor.js";
 
 class EditorObject extends ScreenObject {
@@ -33,7 +34,7 @@ class EditorObject extends ScreenObject {
     }
 
     drawMiddleground() {
-        this.screen.draw.polyRect(this.scaledX, this.scaledY, this.width*this.screen.scale, this.height*this.screen.scale, 0, 'white');
+        this.screen.draw.polyRect(this.scaledX, this.scaledY, this.width*this.screen.scale, this.height*this.screen.scale, 0, this.repObj.color);
         this.screen.draw.text(this.scaledX-this.width*this.screen.scale/2, this.scaledY-this.height*this.screen.scale/2-8, this.rep);
     }
 
@@ -46,9 +47,12 @@ class TestObject extends PhysicsObject {
 
     static width = 64;
     static height = 64;
+    static color = 'red';
 
     constructor(screen, x, y) {
         super(screen, x, y, TestObject.width, TestObject.height);
+        this.weight = 10;
+        this.drawColor = TestObject.color;
     }
 
     mouseDown() {
@@ -62,4 +66,38 @@ class TestObject extends PhysicsObject {
 
 }
 
-export {EditorObject, TestObject}
+class TestObject2 extends PhysicsObject {
+
+    static width = 32;
+    static height = 32;
+    static color = 'orange';
+
+    constructor(screen, x, y) {
+        super(screen, x, y, TestObject2.width, TestObject2.height);
+        this.weight = 1;
+        this.friction = .01;
+        this.elastic = true;
+        this.drawColor = TestObject2.color;
+    }
+
+    
+
+
+}
+
+
+class TestObject3 extends SolidObject {
+
+    static width = 128;
+    static height = 64;
+    static color = 'blue';
+
+    constructor(screen, x, y) {
+        super(screen, x, y, TestObject3.width, TestObject3.height);
+        this.drawColor = TestObject3.color;
+    }
+
+
+}
+
+export {EditorObject, TestObject, TestObject2, TestObject3}
