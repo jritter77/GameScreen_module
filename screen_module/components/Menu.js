@@ -27,9 +27,7 @@ class Menu extends ScreenObject {
         super(screen, x, y);
 
         this.currentNode = this.options;
-
-    
-        this.createButtons(this.options);
+        this.navigate(this.options);
     }
 
 
@@ -39,7 +37,13 @@ class Menu extends ScreenObject {
             const btn = new Button(this.screen, this.x, this.y+48*i, option);
             this.buttons.push(btn);
 
-            btn.setMouseUp(() => this.navigate(root[option]));
+            if (root[option].constructor.name === "Object") {
+                btn.setMouseUp(() => this.navigate(root[option]));
+            } 
+            else {
+                btn.setMouseDown(() => this.menuAction(btn));
+            }
+            
 
             i++;
 
@@ -58,9 +62,7 @@ class Menu extends ScreenObject {
 
     navigate(root) {
 
-        if (root.constructor.name !== "Object") {
-            return;
-        }
+        
 
         for (let btn of this.buttons) {
             btn.removeFromScreen();
@@ -73,6 +75,9 @@ class Menu extends ScreenObject {
 
     }
 
+    menuAction(btn) {
+        console.log("You Clicked " + this.currentNode[btn.msg]);
+    }
     
 
 }

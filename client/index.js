@@ -32,7 +32,6 @@ function Page() {
         mouseCoords.msg = `X: ${screen.scaledMouseX}\nY: ${screen.scaledMouseY}`;
     }
 
-    const menu = new Menu(screen, 0, 128);
 
 
 }

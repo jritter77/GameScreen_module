@@ -5,6 +5,7 @@ import { ScreenObject } from "../screen_module/objects/ScreenObject.js";
 import { SolidObject } from "../screen_module/objects/SolidObject";
 import { EditorObject, TestObject, TestObject2, TestObject3 } from "./EditorObject.js";
 import { LoadButton } from "./LoadButton.js";
+import { ObjectMenu } from "./ObjectMenu.js";
 import { SaveButton } from "./SaveButton.js";
 import { TestButton } from "./TestButton.js";
 
@@ -29,12 +30,15 @@ class Editor extends ScreenObject {
         this.saveButton = new SaveButton(this);
         this.loadButton = new LoadButton(this);
         this.testButton = new TestButton(this);
+        this.objectMenu = new ObjectMenu(this);
 
         
     }
 
     addEditorObject(objectType, x, y) {
-        this.objects.push(new EditorObject(this, objectType, x, y));
+        const obj = new EditorObject(this, objectType, x, y);
+        this.objects.push(obj);
+        return obj;
     }
 
     removeEditorObjects() {
