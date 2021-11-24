@@ -15,6 +15,12 @@ class TestButton extends Button {
         this.setMouseDown(() => this.testRun());
     }
 
+    update() {
+        super.update();
+        this.x = this.editor.loadButton.x + this.editor.loadButton.width;
+        this.y = this.screen.height-this.height;
+    }
+
     startTestRun() {
         this.preTest = this.editor.getObjectList();
         this.editor.removeEditorObjects();

@@ -8,6 +8,7 @@ import { CollisionObject } from "../screen_module/objects/CollisionObject.js";
 import { Editor } from "../editor_module/Editor.js";
 import { Button } from "../screen_module/components/Button.js";
 import { TextBox } from "../screen_module/components/TextBox.js";
+import { Menu } from "../screen_module/components/Menu.js";
 
 function Page() {
     const screen = new GameScreen();
@@ -31,6 +32,7 @@ function Page() {
         mouseCoords.msg = `X: ${screen.scaledMouseX}\nY: ${screen.scaledMouseY}`;
     }
 
+    const menu = new Menu(screen, 0, 128);
 
 
 }

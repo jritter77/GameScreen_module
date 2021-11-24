@@ -14,6 +14,12 @@ class SaveButton extends Button {
 
     }
 
+    update() {
+        super.update();
+        this.x = this.screen.width-256;
+        this.y = this.screen.height-this.height;
+    }
+
     saveObjects() {
         const listname = 'testList';
         const objectList = this.editor.getObjectList(listname);

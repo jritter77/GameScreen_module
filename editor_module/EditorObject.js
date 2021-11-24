@@ -6,28 +6,29 @@ import { Editor } from "./Editor.js";
 
 class EditorObject extends ScreenObject {
 
+    static topClicked;
+
     constructor(editor, rep, x, y) {
         super(editor.screen, x, y);
         
         this.editor = editor;
         this.rep = rep;
         this.repObj = Editor.ObjectList[rep];
-        this.drag = false;
 
         this.width = this.repObj.width;
         this.height = this.repObj.height;
 
         Clickable.call(this, -this.width/2, -this.height/2);
 
-        this.setMouseDown(() => {this.drag = true});
-        this.setMouseUp(() => {this.drag = false});
+        this.setMouseDown(() => {EditorObject.topClicked = this});
+        this.setMouseUp(() => {EditorObject.topClicked = null});
 
         
     }
 
     update() {
         super.update();
-        if (this.drag) {
+        if (EditorObject.topClicked === this) {
             this.x = Math.floor(this.screen.scaledMouseX/this.editor.snap)*this.editor.snap;
             this.y = Math.floor(this.screen.scaledMouseY/this.editor.snap)*this.editor.snap;
         }

@@ -18,12 +18,18 @@ class TextBox extends ScreenObject {
 
         this.width;
         this.height;
+        this.getMsgDimensions();
 
+    }
+
+    update() {
+        super.update();
         this.getMsgDimensions();
     }
 
 
     drawForeground() {
+
 
         this.screen.draw.rect(
             this.x, 

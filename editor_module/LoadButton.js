@@ -9,9 +9,15 @@ class LoadButton extends Button {
         
         this.x = editor.saveButton.x + editor.saveButton.width;
         this.y = this.screen.height-this.height;
-
+    
         this.setMouseDown(() => this.loadObjects());
 
+    }
+
+    update() {
+        super.update();
+        this.x = this.editor.saveButton.x + this.editor.saveButton.width;
+        this.y = this.screen.height-this.height;
     }
 
     loadObjects() {
