@@ -27,6 +27,7 @@ class TestButton extends Button {
         this.createdObjects = this.editor.testObjects();
         this.editor.saveButton.active = false;
         this.editor.loadButton.active = false;
+        this.editor.objectMenu.active = false;
         this.msg = "End";
 
     }
@@ -42,6 +43,7 @@ class TestButton extends Button {
         this.editor.loadObjects(this.preTest);
         this.editor.saveButton.active = true;
         this.editor.loadButton.active = true;
+        this.editor.objectMenu.active = true;
         this.msg = "Test";
 
     }

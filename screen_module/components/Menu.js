@@ -23,18 +23,53 @@ class Menu extends ScreenObject {
 
     buttons = [];
 
+    current = 0;
+    maxOptions = 3;
+
+
     constructor(screen, x, y) {
         super(screen, x, y);
 
         this.currentNode = this.options;
+        this.previousNode = this.currentNode;
         this.navigate(this.options);
     }
 
+    
 
     createButtons(root) {
-        let i = 0;
-        for (let option in root) {
-            const btn = new Button(this.screen, this.x, this.y+48*i, option);
+        const children = Object.keys(root);
+        const start = this.current;
+        const end = Math.min(start + this.maxOptions, children.length);
+
+        let yOffset = 0;
+
+        if (root !== this.options) {
+            const btn = new Button(this.screen, this.x, this.y+48*yOffset, "back");
+            this.buttons.push(btn);
+
+            btn.setMouseUp(() => this.navigate(this.previousNode));
+
+            yOffset++;
+
+        }
+
+        if (this.current > 0) {
+            const btn = new Button(this.screen, this.x, this.y+48*yOffset, "^");
+            this.buttons.push(btn);
+
+            btn.setMouseUp(() => {
+                this.current -= this.maxOptions;
+                this.navigate(root);
+            });
+
+            yOffset++;
+
+        }
+
+        for (let c=start; c<end; c++) {
+            const option = children[c];
+            const btn = new Button(this.screen, this.x, this.y+48*yOffset, option);
             this.buttons.push(btn);
 
             if (root[option].constructor.name === "Object") {
@@ -45,18 +80,25 @@ class Menu extends ScreenObject {
             }
             
 
-            i++;
+            yOffset++;
 
         }
 
-        if (root !== this.options) {
-            const btn = new Button(this.screen, this.x, this.y+48*i, "back");
+
+        if (end < children.length) {
+            const btn = new Button(this.screen, this.x, this.y+48*yOffset, "v");
             this.buttons.push(btn);
 
-            const prev = this.currentNode;
-            btn.setMouseUp(() => this.navigate(prev));
+            btn.setMouseUp(() => {
+                this.current += this.maxOptions;
+                this.navigate(root);
+            });
+
+            yOffset++;
 
         }
+
+        
     }
 
 
@@ -70,7 +112,16 @@ class Menu extends ScreenObject {
 
         this.buttons = [];
 
+        if (root !== this.currentNode) {
+            this.previousNode = this.currentNode;
+            this.current = 0;
+        } else {
+            this.previousNode = this.previousNode;
+        } 
+
         this.createButtons(root);
+        
+
         this.currentNode = root;
 
     }
