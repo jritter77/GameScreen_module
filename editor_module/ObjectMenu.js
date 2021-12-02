@@ -5,9 +5,9 @@ class ObjectMenu extends Menu {
 
     options = {
         submenu1: {
-            option1: 'testObject',
-            option2: 'testObject2',
-            option3: 'testObject3',
+            testObject: 'testObject',
+            testObject2: 'testObject2',
+            testObject3: 'testObject3',
         }, 
         submenu2: {
             option1: 'option1',

@@ -3,6 +3,7 @@ import { Clickable } from "../screen_module/interfaces/Clickable.js";
 import { PhysicsObject } from "../screen_module/objects/PhysicsObject.js";
 import { ScreenObject } from "../screen_module/objects/ScreenObject.js";
 import { SolidObject } from "../screen_module/objects/SolidObject";
+import { DeleteButton } from "./DeleteButton.js";
 import { EditorObject, TestObject, TestObject2, TestObject3 } from "./EditorObject.js";
 import { LoadButton } from "./LoadButton.js";
 import { ObjectMenu } from "./ObjectMenu.js";
@@ -31,6 +32,7 @@ class Editor extends ScreenObject {
         this.loadButton = new LoadButton(this);
         this.testButton = new TestButton(this);
         this.objectMenu = new ObjectMenu(this);
+        this.deleteButton = new DeleteButton(this);
 
         
     }

@@ -26,6 +26,9 @@ class Menu extends ScreenObject {
     current = 0;
     maxOptions = 3;
 
+    buttonHeight = 48;
+    buttonWidth = 128;
+
 
     constructor(screen, x, y) {
         super(screen, x, y);
@@ -45,7 +48,9 @@ class Menu extends ScreenObject {
         let yOffset = 0;
 
         if (root !== this.options) {
-            const btn = new Button(this.screen, this.x, this.y+48*yOffset, "back");
+            const btn = new Button(this.screen, this.x, this.y+this.buttonHeight*yOffset, "back");
+            btn.height = this.buttonHeight;
+            btn.width = this.buttonWidth;
             this.buttons.push(btn);
 
             btn.setMouseUp(() => this.navigate(this.previousNode));
@@ -55,7 +60,9 @@ class Menu extends ScreenObject {
         }
 
         if (this.current > 0) {
-            const btn = new Button(this.screen, this.x, this.y+48*yOffset, "^");
+            const btn = new Button(this.screen, this.x, this.y+this.buttonHeight*yOffset, "^");
+            btn.height = this.buttonHeight;
+            btn.width = this.buttonWidth;
             this.buttons.push(btn);
 
             btn.setMouseUp(() => {
@@ -69,7 +76,9 @@ class Menu extends ScreenObject {
 
         for (let c=start; c<end; c++) {
             const option = children[c];
-            const btn = new Button(this.screen, this.x, this.y+48*yOffset, option);
+            const btn = new Button(this.screen, this.x, this.y+this.buttonHeight*yOffset, option);
+            btn.height = this.buttonHeight;
+            btn.width = this.buttonWidth;
             this.buttons.push(btn);
 
             if (root[option].constructor.name === "Object") {
@@ -86,7 +95,9 @@ class Menu extends ScreenObject {
 
 
         if (end < children.length) {
-            const btn = new Button(this.screen, this.x, this.y+48*yOffset, "v");
+            const btn = new Button(this.screen, this.x, this.y+this.buttonHeight*yOffset, "v");
+            btn.height = this.buttonHeight;
+            btn.width = this.buttonWidth;
             this.buttons.push(btn);
 
             btn.setMouseUp(() => {
@@ -104,7 +115,6 @@ class Menu extends ScreenObject {
 
     navigate(root) {
 
-        
 
         for (let btn of this.buttons) {
             btn.removeFromScreen();

@@ -16,7 +16,7 @@ class MouseInput {
     
     mouseDownHandler(e){				
         //triggers anytime mouse is clicked
-        for (let obj of this.screen.objects) {
+        for (let obj of this.screen.objects.slice(0, this.screen.objects.length)) {
             if (obj.mouseDown) {
                 if (obj.active) {
                     obj.mouseDown(e);
@@ -28,7 +28,7 @@ class MouseInput {
     
     mouseUpHandler(e){				
         //triggers anytime mouse is released
-        for (let obj of this.screen.objects) {
+        for (let obj of this.screen.objects.slice(0, this.screen.objects.length)) {
             if (obj.mouseUp) {
                 if (obj.active) {
                     obj.mouseUp(e);

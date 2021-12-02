@@ -29,6 +29,12 @@ class EditorObject extends ScreenObject {
     update() {
         super.update();
         if (EditorObject.topClicked === this) {
+
+            if (this.editor.deleteButton.delete) {
+                this.removeFromEditor();
+                this.removeFromScreen();
+            }
+
             this.x = Math.floor(this.screen.scaledMouseX/this.editor.snap)*this.editor.snap;
             this.y = Math.floor(this.screen.scaledMouseY/this.editor.snap)*this.editor.snap;
         }
@@ -39,6 +45,10 @@ class EditorObject extends ScreenObject {
         this.screen.draw.text(this.scaledX-this.width*this.screen.scale/2, this.scaledY-this.height*this.screen.scale/2-8, this.rep);
     }
 
+
+    removeFromEditor() {
+        this.editor.objects.splice(this.editor.objects.indexOf(this), 1);
+    }
 
 
 }

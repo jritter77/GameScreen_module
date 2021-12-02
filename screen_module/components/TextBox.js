@@ -22,10 +22,7 @@ class TextBox extends ScreenObject {
 
     }
 
-    update() {
-        super.update();
-        this.getMsgDimensions();
-    }
+    
 
 
     drawForeground() {
@@ -47,6 +44,7 @@ class TextBox extends ScreenObject {
             this.bgColor
         );
 
+        this.screen.ctx
         this.screen.draw.multiLineText(this.x + this.width/2, this.y + this.height/2, this.msg, this.color, this.align, this.font);
 
     }
